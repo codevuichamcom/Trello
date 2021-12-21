@@ -1,16 +1,16 @@
-import React from 'react';
-import { Layout } from "antd";
+import { Layout } from 'antd'
+import React from 'react'
+import styled from 'styled-components'
 
-import './content.css'
+const { Content } = Layout
 
-const {Content} = Layout;
+const ContentStyled = styled(Content)`
+  background: rgb(35, 26, 131);
+  background: linear-gradient(132deg, rgba(35, 26, 131, 1) 0%, rgba(219, 73, 156, 1) 100%);
+`
 
 const ContentComponent = () => {
-    return (
-        <Content className='content'>
-            Content
-        </Content>
-    );
-};
+  return <ContentStyled>Content</ContentStyled>
+}
 
-export default ContentComponent;
+export default ContentComponent
