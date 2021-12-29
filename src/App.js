@@ -1,20 +1,78 @@
+import { RightOutlined } from '@ant-design/icons'
 import { Layout } from 'antd'
+import { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import boardApi from './apis/boardApi'
 import ContentComponent from './components/Content'
 import HeaderComponent from './components/Header'
 import SiderComponent from './components/Sider'
-
-import { RightOutlined } from '@ant-design/icons'
-import styled from 'styled-components'
-import { useState } from 'react'
+import faker from 'faker'
 
 function App() {
+  const [boardColumns, setBoardColumns] = useState([])
   const [width, setWidth] = useState('260px')
+
+  useEffect(() => {
+    const fetchBoard = async () => {
+      const boardColumns = await boardApi.getBoardColumns()
+      boardColumns.sort((b1, b2) => b1.order - b2.order)
+      for (let i = 0; i < boardColumns.length; i++) {
+        const boardColumn = boardColumns[i]
+        const cards = await boardApi.getAllCardsByBoardColumId(boardColumn.id)
+        boardColumn.cards = cards
+      }
+      setBoardColumns(boardColumns)
+    }
+    fetchBoard()
+  }, [])
+
   const onHideSider = () => {
     setWidth('0px')
   }
-
+  const addNewCard = (boardColumnId, value) => {
+    const newBoardColumns = [...boardColumns]
+    const boardColumn = newBoardColumns.find((card) => card.id === boardColumnId)
+    boardColumn.cards.push({ id: faker.datatype.uuid(), title: value })
+    setBoardColumns(newBoardColumns)
+  }
   const onShowSider = () => {
     setWidth('260px')
+  }
+  const applyDropColumn = (dropResult) => {
+    const newBoardColumns = [...boardColumns]
+    const orderSrc = newBoardColumns[dropResult.removedIndex]
+    const orderDest = newBoardColumns[dropResult.addedIndex]
+    boardApi.update(orderSrc.id, { order: orderDest.order })
+    boardApi.update(orderDest.id, { order: orderSrc.order })
+    newBoardColumns.splice(dropResult.removedIndex, 1)
+    newBoardColumns.splice(dropResult.addedIndex, 0, dropResult.payload)
+    setBoardColumns(newBoardColumns)
+  }
+  const applyDropCard = (boardColumnId, dropResult) => {
+    if (dropResult.addedIndex !== null || dropResult.removedIndex !== null) {
+      const newBoardColumns = [...boardColumns]
+      let boardColumnSrc
+      let boardColumnDest
+      let addedIndex, removedIndex
+      //find card source
+      if (dropResult.removedIndex !== null) {
+        removedIndex = dropResult.removedIndex
+        boardColumnSrc = newBoardColumns.find((column) => column.id === boardColumnId)
+        const cardsSrc = boardColumnSrc.cards
+        cardsSrc.splice(removedIndex, 1)
+      }
+      //find card destination
+      if (dropResult.addedIndex !== null) {
+        addedIndex = dropResult.addedIndex
+        boardColumnDest = newBoardColumns.find((column) => column.id === boardColumnId)
+        const cardsDest = boardColumnDest.cards
+        cardsDest.splice(addedIndex, 0, dropResult.payload)
+      }
+      setBoardColumns(newBoardColumns)
+    }
+  }
+  const saveBoardColumnTitle = (boardColumnId, title) => {
+    boardApi.update(boardColumnId, { title })
   }
   const padding = width === '0px' ? '5px 0px 5px 30px' : '5px 0px 5px 10px'
   return (
@@ -25,7 +83,14 @@ function App() {
           <FixedSiderStyled />
           <ArrowRightStyled id="arrowRight" onClick={onShowSider} />
           <SiderComponent width={width} onHideSider={onHideSider} onShowSider={onHideSider} />
-          <ContentComponent padding={padding} />
+          <ContentComponent
+            addNewCard={addNewCard}
+            applyDropColumn={applyDropColumn}
+            applyDropCard={applyDropCard}
+            saveBoardColumnTitle={saveBoardColumnTitle}
+            boardColumns={boardColumns}
+            padding={padding}
+          />
         </LayoutContentStyled>
       </LayoutStyled>
     </>

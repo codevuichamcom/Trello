@@ -1,25 +1,64 @@
 import {
+  CalendarOutlined,
+  CloseOutlined,
+  CopyOutlined,
   DownOutlined,
   EditOutlined,
+  EllipsisOutlined,
+  FilterOutlined,
+  PlusOutlined,
   ProjectOutlined,
   StarOutlined,
-  UsergroupDeleteOutlined,
-  UserOutlined,
-  UserAddOutlined,
-  CalendarOutlined,
   ThunderboltOutlined,
-  FilterOutlined,
-  EllipsisOutlined,
+  UserAddOutlined,
+  UsergroupDeleteOutlined,
 } from '@ant-design/icons'
-import { Col, Divider, Dropdown, Layout, Row, Space, Typography, Avatar } from 'antd'
-import React from 'react'
+import { Avatar, Col, Divider, Dropdown, Layout, Row, Space, Typography } from 'antd'
+import TextArea from 'antd/lib/input/TextArea'
+import React, { useRef } from 'react'
+import { useEffect, useState } from 'react/cjs/react.development'
 import styled from 'styled-components'
 import menu from '../../components/menu'
+import TextEditable from '../TextEditable'
+import { Container, Draggable } from 'react-smooth-dnd'
+
+import './content.css'
 
 const { Content } = Layout
 const { Text } = Typography
 
-const ContentComponent = ({ padding }) => {
+const ContentComponent = ({
+  padding,
+  boardColumns,
+  addNewCard,
+  applyDropColumn,
+  applyDropCard,
+  saveBoardColumnTitle,
+}) => {
+  const [isAddNew, setIsAddNew] = useState('')
+  const [newValue, setNewValue] = useState('')
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    if (isAddNew && inputRef && inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [isAddNew])
+  const clearIsAddNew = () => {
+    setIsAddNew('')
+    setNewValue('')
+  }
+  const onAddCardClick = (boardColumnId) => {
+    addNewCard(boardColumnId, newValue)
+    clearIsAddNew()
+  }
+
+  const onColumnDrop = (dropResult) => {
+    applyDropColumn(dropResult)
+  }
+  const onCardDrop = (boardColumnId, dropResult) => {
+    applyDropCard(boardColumnId, dropResult)
+  }
   return (
     <ContentStyled style={{ padding: padding }}>
       <HeaderStyled>
@@ -46,7 +85,10 @@ const ContentComponent = ({ padding }) => {
             <Avatar
               size="medium"
               icon={
-                <img src="https://lh3.googleusercontent.com/a-/AOh14GhTFDRxiaqfQF8lEYZ5OXYPbevPW6eX9jeeQvnOBw=s96-c-rg-br100" />
+                <img
+                  src="https://lh3.googleusercontent.com/a-/AOh14GhTFDRxiaqfQF8lEYZ5OXYPbevPW6eX9jeeQvnOBw=s96-c-rg-br100"
+                  alt=""
+                />
               }
             />
             <InviteStyled>
@@ -80,120 +122,107 @@ const ContentComponent = ({ padding }) => {
           </Space>
         </Col>
       </HeaderStyled>
-      <Container>
+      <ContainerBoard>
         <Board>
-          <Card>
-            <CardHeader>
-              <TextHeader>In Progress</TextHeader>
-            </CardHeader>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-          </Card>
-          <Card>
-            <CardHeader>
-              <TextHeader>In Progress</TextHeader>
-            </CardHeader>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-          </Card>
-          <Card>
-            <CardHeader>
-              <TextHeader>In Progress</TextHeader>
-            </CardHeader>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-          </Card>
-          <Card>
-            <CardHeader>
-              <TextHeader>In Progress</TextHeader>
-            </CardHeader>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-          </Card>
-          <Card>
-            <CardHeader>
-              <TextHeader>In Progress</TextHeader>
-            </CardHeader>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-          </Card>
-          <Card>
-            <CardHeader>
-              <TextHeader>In Progress</TextHeader>
-            </CardHeader>
-            <CardItem>
-              <Text style={{ flex: 1 }}>Setting layout</Text>
-              <EditIconStyled />
-            </CardItem>
-          </Card>
+          <Container
+            orientation="horizontal"
+            onDrop={onColumnDrop}
+            getChildPayload={(index) => boardColumns[index]}
+            dragHandleSelector=".column-drag-handle"
+            dragClass="cards-ghost"
+            dropClass="cards-ghost-drop"
+            dropPlaceholder={{
+              animationDuration: 150,
+              showOnTop: true,
+              className: 'cards-drop-preview',
+            }}
+          >
+            {boardColumns.map((boardColumn) => {
+              return (
+                <Draggable key={boardColumn.id}>
+                  <BoardColumn>
+                    <BoardColumnHeader className="column-drag-handle">
+                      <TextEditable
+                        onTextBlur={(value) => {
+                          saveBoardColumnTitle(boardColumn.id, value)
+                        }}
+                        title={boardColumn.title}
+                      />
+                      <ElipStyled />
+                    </BoardColumnHeader>
+                    <BoardColumnBody>
+                      <Container
+                        groupName="col"
+                        onDrop={(dropResult) => {
+                          onCardDrop(boardColumn.id, dropResult)
+                        }}
+                        getChildPayload={(index) => boardColumn.cards[index]}
+                        dragClass="card-ghost"
+                        dropClass="card-ghost-drop"
+                        dropPlaceholder={{
+                          animationDuration: 150,
+                          showOnTop: true,
+                          className: 'card-drop-preview',
+                        }}
+                        dropPlaceholderAnimationDuration={200}
+                      >
+                        {boardColumn.cards.map((card) => (
+                          <Draggable key={card.id}>
+                            <Card>
+                              <TextEditable title={card.title} />
+                              <EditIconStyled />
+                            </Card>
+                          </Draggable>
+                        ))}
+                      </Container>
+                    </BoardColumnBody>
+                    {isAddNew && isAddNew === boardColumn.id ? (
+                      <>
+                        <TextArea
+                          ref={inputRef}
+                          autoSize
+                          style={{ minHeight: '60px', marginBottom: '8px' }}
+                          placeholder="Any text here..."
+                          value={newValue}
+                          onChange={(e) => {
+                            setNewValue(e.target.value)
+                          }}
+                          // onBlur={clearIsAddNew}
+                        />
+                        <BoardColumnFooter>
+                          <Wrapper>
+                            <ButtonAddCard
+                              onClick={() => {
+                                onAddCardClick(boardColumn.id)
+                              }}
+                            >
+                              Add Card
+                            </ButtonAddCard>
+                            <CloseOutlined onClick={clearIsAddNew} style={{ fontSize: '20px' }} />
+                          </Wrapper>
+                          <ElipStyled style={{ fontSize: '30px' }} />
+                        </BoardColumnFooter>
+                      </>
+                    ) : (
+                      <BoardColumnFooter>
+                        <TextFooter
+                          onClick={() => {
+                            setIsAddNew(boardColumn.id)
+                          }}
+                        >
+                          <PlusOutlined />
+                          Add a card
+                        </TextFooter>
+                        <CopyOutlined />
+                      </BoardColumnFooter>
+                    )}
+                  </BoardColumn>
+                </Draggable>
+              )
+            })}
+          </Container>
         </Board>
-      </Container>
+      </ContainerBoard>
     </ContentStyled>
   )
 }
@@ -205,7 +234,7 @@ const HeaderStyled = styled(Row)`
   padding-left: 10px;
 `
 
-const Container = styled.div`
+const ContainerBoard = styled.div`
   height: calc(100vh - 106px);
   overflow-x: auto;
   overflow-y: hidden;
@@ -233,13 +262,25 @@ const Board = styled.div`
   align-items: flex-start;
   width: 200%;
 `
-const Card = styled.div`
+const BoardColumn = styled.div`
   background-color: #ebecf0;
   width: 271px;
   border-radius: 3px;
   padding: 7px;
   margin-left: 10px;
-  max-height: 550px;
+`
+const BoardColumnHeader = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  &:hover {
+    cursor: pointer;
+  }
+`
+const BoardColumnBody = styled.div`
+  max-height: calc(100vh - 300px);
   overflow-y: auto;
   &::-webkit-scrollbar {
     --webkit-appearance: none;
@@ -248,33 +289,24 @@ const Card = styled.div`
     width: 5px;
   }
   &::-webkit-scrollbar-track {
-    border-left: 11px solid #dadbe2;
-    margin: 40px 0px 20px 0px;
+    border-right: 11px solid #dadbe2;
+    margin: 10px 0px;
   }
   &::-webkit-scrollbar-thumb {
-    border-left: 11px solid #bfc4ce;
+    border-right: 11px solid #bfc4ce;
   }
 `
-const CardHeader = styled.div`
-  padding-top: 5px;
-  padding-bottom: 5px;
-  &:hover {
-    cursor: pointer;
-  }
+const BoardColumnFooter = styled(Text)`
+  display: flex;
+  align-items: center;
+  color: #6b778c;
 `
-
-const TextHeader = styled(Text)`
-  padding-left: 10px;
-  color: #172b4d;
-  font-weight: 600;
-`
-const CardItem = styled.div`
+const Card = styled.div`
   display: flex;
   align-items: flex-start;
   background-color: #fff;
   border-radius: 3px;
   margin-bottom: 10px;
-  padding: 6px 8px 2px;
   box-shadow: 0 1px 0 #091e4240;
   &:hover {
     background-color: #f4f5f7;
@@ -323,5 +355,41 @@ const StarStyled = styled(ButtonStyled)`
 const DividerStyled = styled(Divider)`
   height: 16px;
   border-left: 1px solid #ffffff3d;
+`
+
+const ElipStyled = styled(EllipsisOutlined)`
+  color: #213455;
+  padding: 8px;
+  font-size: 18px;
+  &:hover {
+    color: #213455;
+    background-color: #dadbe2;
+    border-radius: 2px;
+  }
+`
+
+const TextFooter = styled(Text)`
+  flex-grow: 1;
+  padding: 4px 8px;
+  margin-right: 5px;
+  &:hover {
+    background-color: #dadbe2;
+  }
+`
+
+const Wrapper = styled(Space)`
+  flex-grow: 1;
+`
+
+const ButtonAddCard = styled.div`
+  background-color: #0079bf;
+  padding: 6px 12px;
+  color: #f9fcfd;
+  border-radius: 2px;
+  &:hover {
+    background-color: #026aa7;
+    color: #ffffff;
+    cursor: pointer;
+  }
 `
 export default ContentComponent

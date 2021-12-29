@@ -47,7 +47,10 @@ const HeaderComponent = () => {
           <Avatar
             size="small"
             icon={
-              <img src="https://lh3.googleusercontent.com/a-/AOh14GhTFDRxiaqfQF8lEYZ5OXYPbevPW6eX9jeeQvnOBw=s96-c-rg-br100" />
+              <img
+                src="https://lh3.googleusercontent.com/a-/AOh14GhTFDRxiaqfQF8lEYZ5OXYPbevPW6eX9jeeQvnOBw=s96-c-rg-br100"
+                alt=""
+              />
             }
           />
         </FlexBox>

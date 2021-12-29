@@ -7,7 +7,6 @@ import board from '../../assets/images/board.svg'
 import member from '../../assets/images/member.svg'
 import setting from '../../assets/images/setting.svg'
 import workspace from '../../assets/images/workspace.svg'
-import premium from '../../assets/images/premium.svg'
 const { Sider } = Layout
 const { Text } = Typography
 
@@ -24,20 +23,20 @@ const SiderComponent = ({ width, onHideSider }) => {
       </HeaderSider>
       <BodySider>
         <ItemStyled>
-          <img src={board} />
+          <img src={board} alt="" />
           <TextItem>Boards</TextItem>
         </ItemStyled>
         <ItemStyled>
-          <img src={member} />
+          <img src={member} alt="" />
           <TextItem>Members</TextItem>
         </ItemStyled>
         <ItemStyled>
-          <img src={setting} />
+          <img src={setting} alt="" />
           <TextItem>Settings</TextItem>
         </ItemStyled>
         <TextTitleStyled>Workspace views</TextTitleStyled>
         <ItemStyled>
-          <img src={workspace} />
+          <img src={workspace} alt="" />
           <TextItem type="secondary" italic>
             Workspace table
           </TextItem>
@@ -60,6 +59,7 @@ const slideAnimationOut = keyframes`${slideOutLeft}`
 const SiderStyled = styled(Sider)`
   display: flex;
   flex-direction: column;
+  height: calc(100vh - 44px);
   background-color: #fafbfc;
   animation: ${(props) => {
     return props.width === '0%' || props.width === '0px' ? css`1s ${slideAnimationOut} forward` : ''
